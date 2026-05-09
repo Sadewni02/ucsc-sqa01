@@ -9,6 +9,9 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+    import org.openqa.selenium.support.ui.WebDriverWait;
+    import org.openqa.selenium.support.ui.ExpectedConditions;
+    import java.time.Duration;
 import org.testng.Assert;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -21,10 +24,28 @@ public class Demo {
     @BeforeMethod 
     public void setUp() {
         // Corrected casing: WebDriverManager (starts with Uppercase W)
-        WebDriverManager.chromedriver().setup();
+            options.addArguments("--headless=new");
         
         // Corrected casing: ChromeOptions
         ChromeOptions options = new ChromeOptions();
+            // If running in CI (GitHub Actions) or an environment with Chromium binary,
+            // set the binary path if available so ChromeDriver can find the browser.
+            String chromeBinary = System.getenv("CHROME_BIN");
+            if (chromeBinary == null || chromeBinary.isEmpty()) {
+                // Common locations on Linux runners
+                if (new java.io.File("/usr/bin/google-chrome-stable").exists()) {
+                    chromeBinary = "/usr/bin/google-chrome-stable";
+                } else if (new java.io.File("/usr/bin/google-chrome").exists()) {
+                    chromeBinary = "/usr/bin/google-chrome";
+                } else if (new java.io.File("/usr/bin/chromium-browser").exists()) {
+                    chromeBinary = "/usr/bin/chromium-browser";
+                } else if (new java.io.File("/usr/bin/chromium").exists()) {
+                    chromeBinary = "/usr/bin/chromium";
+                }
+            }
+            if (chromeBinary != null && !chromeBinary.isEmpty()) {
+                options.setBinary(chromeBinary);
+            }
         options.addArguments("--headless");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
@@ -42,6 +63,11 @@ public class Demo {
         driver.navigate().to("https://www.amazon.com");
         String title = driver.getTitle();
         Assert.assertTrue(title.contains("Amazon"), "Amazon page title not found");
+            
+            // Wait for the search results container to appear and assert it's present
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("search")));
+            Assert.assertTrue(driver.findElements(By.id("search")).size() > 0, "Search results container not found");
     }
 
     @Test
