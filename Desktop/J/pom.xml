@@ -22,7 +22,15 @@
           <suiteXmlFiles>
             <suiteXmlFile>testng.xml</suiteXmlFile>
           </suiteXmlFiles>
+          <systemPropertyVariables>
+            <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+          </systemPropertyVariables>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>io.qameta.allure</groupId>
+        <artifactId>allure-maven</artifactId>
+        <version>2.14.0</version>
       </plugin>
     </plugins>
   </build>
@@ -52,6 +60,13 @@
             <artifactId>selenium-api</artifactId>
             <version>4.41.0</version>
             <scope>compile</scope>
+        </dependency>
+        <!-- Allure TestNG adapter for reporting -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-testng</artifactId>
+            <version>2.34.0</version>
+            <scope>test</scope>
         </dependency>
   </dependencies>
 </project>

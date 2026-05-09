@@ -12,7 +12,9 @@ import org.openqa.selenium.Keys;
 import org.testng.Assert;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import io.qameta.allure.*;
 
+@Feature("Amazon Selenium Tests")
 public class Demo {
     protected WebDriver driver;
 
@@ -32,6 +34,10 @@ public class Demo {
     }
 
     @Test
+    @Story("Homepage Verification")
+    @Description("Verify Amazon homepage loads successfully and contains correct title")
+    @Severity(SeverityLevel.CRITICAL)
+    @Owner("QA Team")
     public void testCase1() {
         driver.navigate().to("https://www.amazon.com");
         String title = driver.getTitle();
@@ -39,6 +45,10 @@ public class Demo {
     }
 
     @Test
+    @Story("Product Search")
+    @Description("Search for a product on Amazon and verify results page appears")
+    @Severity(SeverityLevel.CRITICAL)
+    @Owner("QA Team")
     public void testCase2() {
         // Test: Search for a product on Amazon and verify results page appears
         driver.navigate().to("https://www.amazon.com");
@@ -54,6 +64,10 @@ public class Demo {
     }
 
     @Test
+    @Story("Search Box Functionality")
+    @Description("Verify Amazon search box visibility and input field behavior")
+    @Severity(SeverityLevel.NORMAL)
+    @Owner("QA Team")
     public void testCase3() {
         // Test: Verify Amazon page navigation and element visibility
         driver.navigate().to("https://www.amazon.com");
